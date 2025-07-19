@@ -1,4 +1,5 @@
-﻿using ticTacToeRestApi.Data.Entities;
+﻿using System.Threading;
+using ticTacToeRestApi.Data.Entities;
 using ticTacToeRestApi.Interfaces;
 
 namespace ticTacToeRestApi.Services
@@ -22,7 +23,7 @@ namespace ticTacToeRestApi.Services
             _config = config;
         }
 
-        public async Task<Game> CreateGameAsync(Guid playerXId, Guid playerOId, int boardSize = 3, int winLength = 3)
+        public async Task<Game> CreateGameAsync(Guid playerXId, Guid playerOId, int boardSize = 3, int winLength = 3, CancellationToken cancellationToken = default)
         {
             if (boardSize < 3)
                 throw new ArgumentException("The field size must be at least 3", nameof(boardSize));
@@ -41,19 +42,19 @@ namespace ticTacToeRestApi.Services
 
             };
 
-            await _gameRepository.AddAsync(game);
+            await _gameRepository.AddAsync(game, cancellationToken);
             return game;
 
         }
 
-        public Task<Game?> GetGameAsync(Guid gameId)
+        public Task<Game?> GetGameAsync(Guid gameId, CancellationToken cancellationToken = default)
         {
-            return _gameRepository.GetGameWithMovesAsync(gameId);
+            return _gameRepository.GetGameWithMovesAsync(gameId, cancellationToken);
         }
 
-        public async Task<Move> MakeMoveAsync(Guid gameId, Guid playerId, int row, int column)
+        public async Task<Move> MakeMoveAsync(Guid gameId, Guid playerId, int row, int column, CancellationToken cancellationToken = default)
         {
-            var game = await _gameRepository.GetGameWithMovesAsync(gameId)
+            var game = await _gameRepository.GetGameWithMovesAsync(gameId, cancellationToken)
                 ?? throw new Exception("Game not found");
 
             if (game.WinnerId != null)
@@ -101,8 +102,8 @@ namespace ticTacToeRestApi.Services
                 game.CurrentTurn = game.CurrentTurn == "X" ? "O" : "X";
             }
 
-            await _moveRepository.AddAsync(move);
-            await _gameRepository.UpdateAsync(game);
+            await _moveRepository.AddAsync(move, cancellationToken);
+            await _gameRepository.UpdateAsync(game, cancellationToken);
 
             return move;
         }

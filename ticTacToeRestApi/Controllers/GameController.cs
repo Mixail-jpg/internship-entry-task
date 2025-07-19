@@ -16,25 +16,25 @@ namespace ticTacToeRestApi.Controllers
         }
 
         [HttpGet("{gameId}")]
-        public async Task<IActionResult> GetGame(Guid gameId)
+        public async Task<IActionResult> GetGame(Guid gameId, CancellationToken cancellationToken)
         {
-            var game = await _gameService.GetGameAsync(gameId);
+            var game = await _gameService.GetGameAsync(gameId, cancellationToken);
             return game == null ? NotFound() : Ok(game);
         }
 
         [HttpPost("create")]
-        public async Task<IActionResult> CreateGame([FromBody] CreateGameDto gameDto)
+        public async Task<IActionResult> CreateGame([FromBody] CreateGameDto gameDto, CancellationToken cancellationTocken)
         {
-            var game = await _gameService.CreateGameAsync(gameDto.PlayerXId, gameDto.PlayerOId, gameDto.boardSize, gameDto.winLength);
+            var game = await _gameService.CreateGameAsync(gameDto.PlayerXId, gameDto.PlayerOId, gameDto.boardSize, gameDto.winLength, cancellationTocken);
             return Ok(game);
         }
 
         [HttpPost("{gameId}/move")]
-        public async Task<IActionResult> MakeMove(Guid gameId, [FromBody] MoveDto moveDto)
+        public async Task<IActionResult> MakeMove(Guid gameId, [FromBody] MoveDto moveDto, CancellationToken cancellationToken)
         {
             try
             {
-                var move = await _gameService.MakeMoveAsync(gameId, moveDto.PlayerId, moveDto.Row, moveDto.Column);
+                var move = await _gameService.MakeMoveAsync(gameId, moveDto.PlayerId, moveDto.Row, moveDto.Column, cancellationToken);
                 return Ok(move);
             }
             catch (Exception ex)

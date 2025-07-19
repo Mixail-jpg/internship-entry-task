@@ -3,7 +3,7 @@
     public class Player
     {
         public Guid Id { get; set; }
-        public required string Name { get; set; }
+        public string? Name { get; set; }
 
         public List<Game> GamesAsX { get; set; } = new();
         public List<Game> GamesAsO { get; set; } = new();

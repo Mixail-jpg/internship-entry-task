@@ -11,9 +11,10 @@ namespace ticTacToeRestApi.Repositories
 
         public GameRepository(GameDbContext context) : base(context)
         {
+            _context = context;
         }
 
-        public async Task<Game?> GetGameWithMovesAsync(Guid gameId)
+        public async Task<Game?> GetGameWithMovesAsync(Guid gameId, CancellationToken cancellationToken = default)
         {
             return await _context.Games
                 .Include(g => g.Moves)

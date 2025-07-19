@@ -5,10 +5,10 @@
         public Guid Id { get; set; }
 
         public Guid PlayerXId { get; set; }
-        public Player PlayerX { get; set; }
+        public Player? PlayerX { get; set; } = null!;
 
         public Guid PlayerOId { get; set; }
-        public Player PlayerO { get; set; }
+        public Player PlayerO { get; set; } = null!;
 
         public required int BoardSize { get; set; }
 

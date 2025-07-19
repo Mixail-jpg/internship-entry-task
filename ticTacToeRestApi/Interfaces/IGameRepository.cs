@@ -4,7 +4,7 @@ namespace ticTacToeRestApi.Interfaces
 {
     public interface IGameRepository : IGenericRepository<Game>
     {
-        Task<Game?> GetGameWithMovesAsync(Guid gameId);
+        Task<Game?> GetGameWithMovesAsync(Guid gameId, CancellationToken cancellationToken = default);
 
     }
 }
