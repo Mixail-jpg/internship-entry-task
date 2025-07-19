@@ -1,0 +1,29 @@
+name: .NET CI Pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Cloning a repository
+      uses: actions/checkout@v4
+
+    - name: Installing .NET 9.0
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '9.0.x'
+
+    - name: Dependency Recovery
+      run: dotnet restore
+
+    - name: Building the project
+      run: dotnet build --configuration Release --no-restore
+
+    - name: Running Tests
+      run: dotnet test ticTacToeRestApi.Tests/ticTacToeRestApi.Tests.csproj --no-build --verbosity normal

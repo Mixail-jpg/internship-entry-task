@@ -41,5 +41,6 @@ namespace ticTacToeRestApi.Repositories
             _entities.Update(entity);
             return Task.CompletedTask;
         }
+
     }
 }
